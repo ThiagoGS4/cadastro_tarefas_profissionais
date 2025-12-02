@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cadastro_tarefas_profissionais/screens/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
           surface: Color.fromRGBO(82, 71, 97, 1),
           onSurface: Colors.white 
         )
-      )
+      ),
+      home: const Home(),
       );
   }
 }

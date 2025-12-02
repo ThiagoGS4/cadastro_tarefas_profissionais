@@ -20,6 +20,14 @@ class Tarefa {
     codigoRegistro: json['codigoRegistro']
   );
 
+   Map<String,dynamic> toJson() => {
+    'id': id,
+    'titulo': titulo,
+    'prioridade': prioridade,
+    'criadoEm': criadoEm, 
+    'codigoRegistro': codigoRegistro
+  };
+
   @override
   String toString() {
     return 'Tarefa{id: $id, titulo: $titulo, prioridade: $prioridade, criadoEm: $criadoEm, codigoRegistro: $codigoRegistro}';

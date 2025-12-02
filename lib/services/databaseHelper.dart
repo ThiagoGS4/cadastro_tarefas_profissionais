@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:cadastro_tarefas_profissionais/lib/tarefaModel.dart';
+import 'package:cadastro_tarefas_profissionais/models/tarefaModel.dart';
 
 class DatabaseHelper {
   static const int version = 1;
@@ -10,7 +10,7 @@ class DatabaseHelper {
     return openDatabase(join(await getDatabasesPath(), bdName),
         onCreate: (db, version) async => await db.execute(
       'CREATE TABLE cadastro_tarefas(id INTEGER PRIMARY KEY, titulo TEXT, prioridade INTEGER, criadoEm DATE, codigoRegistro INTEGER)',),
-        version: _version);
+        version: version);
   }
 
     static Future<int> inserirTarefa(Tarefa tarefa) async {

@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:cadastro_tarefas_profissionais/screens/home.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(const MyApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
+    return MaterialApp(
+      title: 'Flutter Local Database demo app',
+      theme: ThemeData(
+        colorScheme: ColorScheme(
+          brightness: Brightness.dark,
+          primary: Colors.indigo,
+          onPrimary: Colors.white,
+          secondary: Colors.black87,
+          onSecondary: Colors.white,
+          error: Colors.pink,
+          onError: Colors.white,
+          surface: Color.fromRGBO(82, 71, 97, 1),
+          onSurface: Colors.white,
         ),
       ),
+      home: const Home(),
     );
   }
 }

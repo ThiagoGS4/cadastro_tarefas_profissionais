@@ -20,6 +20,10 @@ enum PrioridadeLabel {
   final String text;
   final Color color;
 
+  static PrioridadeLabel fromPrio(int prio) {
+    return values.firstWhere((p) => p.prio == prio, orElse: () => nurgente);
+  }
+
   static final List<PrioridadeEntry> entries =
       UnmodifiableListView<PrioridadeEntry>(
         values.map<PrioridadeEntry>(
@@ -54,6 +58,7 @@ class _MyWidgetState extends State<InsertEditDialog> {
   final TextEditingController descricaoController = TextEditingController();
   final TextEditingController codigoRegistroController =
       TextEditingController();
+  bool autoGerarCodigoRegistro = false;
 
   PrioridadeLabel? prioObject;
   int? selectedPrio;
@@ -68,12 +73,11 @@ class _MyWidgetState extends State<InsertEditDialog> {
       descricaoController.text = t.descricao;
       codigoRegistroController.text = t.codigoRegistro;
 
-      // t.prioridade é int (1..5):
       prioObject = PrioridadeLabel.values.firstWhere(
         (p) => p.prio == t.prioridade,
         orElse: () => PrioridadeLabel.nurgente,
       );
-      selectedPrio = t.prioridade; // já deixa o ID preparado
+      selectedPrio = t.prioridade;
     } else {
       prioObject = PrioridadeLabel.nurgente;
       selectedPrio = PrioridadeLabel.nurgente.prio;
@@ -135,7 +139,7 @@ class _MyWidgetState extends State<InsertEditDialog> {
                     onSelected: (PrioridadeLabel? prio) {
                       setState(() {
                         prioObject = prio;
-                        selectedPrio = prio?.prio; // guarda o ID
+                        selectedPrio = prio?.prio;
                       });
                     },
                     dropdownMenuEntries: PrioridadeLabel.entries,
@@ -144,12 +148,36 @@ class _MyWidgetState extends State<InsertEditDialog> {
 
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  child: TextFormField(
-                    controller: codigoRegistroController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Código de Registro',
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("Auto gerar código de registro?"),
+                          Checkbox(
+                            value: autoGerarCodigoRegistro,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                autoGerarCodigoRegistro = value ?? false;
+                                codigoRegistroController.text = "";
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+
+                      TextFormField(
+                        controller: codigoRegistroController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Código de Registro',
+                        ),
+                        enabled: !autoGerarCodigoRegistro,
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -165,21 +193,41 @@ class _MyWidgetState extends State<InsertEditDialog> {
               widget.onFinish?.call();
               Navigator.pop(context);
             },
+            child: Icon(
+              widget.isEditing ? Icons.edit_document : Icons.add_task,
+            ),
           ),
-
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Close'),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Fechar'),
+            ),
           ),
         ],
       ),
     );
   }
 
+  String gerarCodigoRegistro(DateTime dt) {
+    final ano = dt.year.toString().padLeft(4, '0');
+    final mes = dt.month.toString().padLeft(2, '0');
+    final dia = dt.day.toString().padLeft(2, '0');
+    final hora = dt.hour.toString().padLeft(2, '0');
+    final minuto = dt.minute.toString().padLeft(2, '0');
+    final segundo = dt.second.toString().padLeft(2, '0');
+
+    return '$ano$mes$dia$hora$minuto$segundo';
+  }
+
   Future<void> _inserirTarefa() async {
     final prioNum = selectedPrio ?? PrioridadeLabel.nurgente.prio;
+
+    if (autoGerarCodigoRegistro) {
+      codigoRegistroController.text = gerarCodigoRegistro(DateTime.now());
+    }
 
     final Tarefa model = Tarefa(
       titulo: tituloController.value.text,
@@ -194,6 +242,10 @@ class _MyWidgetState extends State<InsertEditDialog> {
 
   Future<void> _atualizarTarefa() async {
     final prioNum = selectedPrio ?? PrioridadeLabel.nurgente.prio;
+
+    if (autoGerarCodigoRegistro) {
+      codigoRegistroController.text = gerarCodigoRegistro(DateTime.now());
+    }
     final Tarefa model = Tarefa(
       id: widget.itemSelecionado!.id,
       titulo: tituloController.value.text,

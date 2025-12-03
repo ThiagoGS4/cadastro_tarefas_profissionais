@@ -20,6 +20,10 @@ enum PrioridadeLabel {
   final String text;
   final Color color;
 
+  static PrioridadeLabel fromPrio(int prio) {
+    return values.firstWhere((p) => p.prio == prio, orElse: () => nurgente);
+  }
+
   static final List<PrioridadeEntry> entries =
       UnmodifiableListView<PrioridadeEntry>(
         values.map<PrioridadeEntry>(
@@ -54,6 +58,7 @@ class _MyWidgetState extends State<InsertEditDialog> {
   final TextEditingController descricaoController = TextEditingController();
   final TextEditingController codigoRegistroController =
       TextEditingController();
+  bool autoGerarCodigoRegistro = false;
 
   PrioridadeLabel? prioObject;
   int? selectedPrio;
@@ -144,12 +149,36 @@ class _MyWidgetState extends State<InsertEditDialog> {
 
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  child: TextFormField(
-                    controller: codigoRegistroController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Código de Registro',
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("Auto gerar código de registro?"),
+                          Checkbox(
+                            value: autoGerarCodigoRegistro,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                autoGerarCodigoRegistro = value ?? false;
+                                codigoRegistroController.text = "";
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+
+                      TextFormField(
+                        controller: codigoRegistroController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Código de Registro',
+                        ),
+                        enabled: !autoGerarCodigoRegistro,
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -178,8 +207,23 @@ class _MyWidgetState extends State<InsertEditDialog> {
     );
   }
 
+  String gerarCodigoRegistro(DateTime dt) {
+    final ano = dt.year.toString().padLeft(4, '0');
+    final mes = dt.month.toString().padLeft(2, '0');
+    final dia = dt.day.toString().padLeft(2, '0');
+    final hora = dt.hour.toString().padLeft(2, '0');
+    final minuto = dt.minute.toString().padLeft(2, '0');
+    final segundo = dt.second.toString().padLeft(2, '0');
+
+    return '$ano$mes$dia$hora$minuto$segundo';
+  }
+
   Future<void> _inserirTarefa() async {
     final prioNum = selectedPrio ?? PrioridadeLabel.nurgente.prio;
+
+    if (autoGerarCodigoRegistro) {
+      codigoRegistroController.text = gerarCodigoRegistro(DateTime.now());
+    }
 
     final Tarefa model = Tarefa(
       titulo: tituloController.value.text,

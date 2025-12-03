@@ -10,10 +10,10 @@ class DatabaseHelper {
     return openDatabase(
       join(await getDatabasesPath(), bdName),
       onCreate: (db, version) async => await db.execute(
-        'CREATE TABLE IF NOT EXISTS Tarefa(id INTEGER PRIMARY KEY, titulo TEXT, prioridade TEXT, criadoEm STRING, codigoRegistro INTEGER)',
+        'CREATE TABLE IF NOT EXISTS Tarefa(id INTEGER PRIMARY KEY, titulo TEXT, descricao TEXT, prioridade INTEGER, criadoEm TEXT, codigoRegistro TEXT)',
       ),
       onOpen: (db) async => await db.execute(
-        'CREATE TABLE IF NOT EXISTS Tarefa(id INTEGER PRIMARY KEY, titulo TEXT, prioridade TEXT, criadoEm STRING, codigoRegistro INTEGER)',
+        'CREATE TABLE IF NOT EXISTS Tarefa(id INTEGER PRIMARY KEY, titulo TEXT, descricao TEXT, prioridade INTEGER, criadoEm TEXT, codigoRegistro TEXT)',
       ),
       version: version,
     );

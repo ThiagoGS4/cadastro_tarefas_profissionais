@@ -193,13 +193,18 @@ class _MyWidgetState extends State<InsertEditDialog> {
               widget.onFinish?.call();
               Navigator.pop(context);
             },
+            child: Icon(
+              widget.isEditing ? Icons.edit_document : Icons.add_task,
+            ),
           ),
-
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Close'),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Fechar'),
+            ),
           ),
         ],
       ),

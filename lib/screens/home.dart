@@ -73,9 +73,13 @@ class HomeState extends State<Home> {
           Padding(
             padding: const EdgeInsets.all(12),
             child: Card(
-              elevation: 2,
+              elevation: 4.0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(
+                  color: const Color.fromARGB(221, 34, 34, 34),
+                  width: 1.0,
+                ),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -100,7 +104,10 @@ class HomeState extends State<Home> {
                           SizedBox(height: 4),
                           Text(
                             'Adicione ou edite tarefas profissionais',
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Color.fromARGB(255, 58, 58, 58),
+                            ),
                           ),
                         ],
                       ),
@@ -154,6 +161,14 @@ class HomeState extends State<Home> {
                         tarefa.prioridade,
                       );
                       return Card(
+                        elevation: 4.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: BorderSide(
+                            color: const Color.fromARGB(221, 34, 34, 34),
+                            width: 1.0,
+                          ),
+                        ),
                         margin: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 6,
@@ -171,6 +186,7 @@ class HomeState extends State<Home> {
                           ),
                           title: Text(tarefa.titulo),
                           subtitle: Text(
+                            'Descrição: ${tarefa.descricao}\n'
                             '${PrioridadeLabel.fromPrio(tarefa.prioridade).text} • '
                             'Código: ${tarefa.codigoRegistro}\n'
                             'Criado em: ${formatarData(tarefa.criadoEm)}',
@@ -184,7 +200,7 @@ class HomeState extends State<Home> {
                                 style: ButtonStyle(
                                   backgroundColor:
                                       WidgetStateProperty.all<Color>(
-                                        Colors.blue,
+                                        Theme.of(context).colorScheme.primary,
                                       ),
                                 ),
                                 onPressed: () async {

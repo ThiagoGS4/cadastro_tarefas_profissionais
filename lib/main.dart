@@ -25,12 +25,15 @@ class MyApp extends StatelessWidget {
           error: Colors.pink,
           onError: Colors.white,
           surface: Colors.white,
-          onSurface: Colors.black87
-        )
+          onSurface: Colors.black87,
+          surfaceContainer: const Color.fromARGB(255, 106, 117, 179),
+          surfaceContainerLow: const Color.fromARGB(255, 196, 196, 196),
+        ),
       ),
       home: const Home(),
-      );
+    );
   }
 }
+
 //Trocar pelo desejado
 //color: Theme.of(context).colorScheme.//Primary//,

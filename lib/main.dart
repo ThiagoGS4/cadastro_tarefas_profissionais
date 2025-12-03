@@ -17,15 +17,20 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
           primary: Colors.indigo,
           onPrimary: Colors.white,
+          primaryContainer: Colors.indigoAccent,
+          onPrimaryContainer: Colors.white,
           secondary: Colors.black87,
           onSecondary: Colors.white,
+          secondaryContainer: const Color.fromARGB(255, 46, 46, 46),
           error: Colors.pink,
           onError: Colors.white,
-          surface: Color.fromRGBO(82, 71, 97, 1),
-          onSurface: Colors.white 
+          surface: Colors.white,
+          onSurface: Colors.black87
         )
       ),
       home: const Home(),
       );
   }
 }
+//Trocar pelo desejado
+//color: Theme.of(context).colorScheme.//Primary//,

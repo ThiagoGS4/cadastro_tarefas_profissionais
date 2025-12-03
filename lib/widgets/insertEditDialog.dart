@@ -73,12 +73,11 @@ class _MyWidgetState extends State<InsertEditDialog> {
       descricaoController.text = t.descricao;
       codigoRegistroController.text = t.codigoRegistro;
 
-      // t.prioridade é int (1..5):
       prioObject = PrioridadeLabel.values.firstWhere(
         (p) => p.prio == t.prioridade,
         orElse: () => PrioridadeLabel.nurgente,
       );
-      selectedPrio = t.prioridade; // já deixa o ID preparado
+      selectedPrio = t.prioridade;
     } else {
       prioObject = PrioridadeLabel.nurgente;
       selectedPrio = PrioridadeLabel.nurgente.prio;
@@ -140,7 +139,7 @@ class _MyWidgetState extends State<InsertEditDialog> {
                     onSelected: (PrioridadeLabel? prio) {
                       setState(() {
                         prioObject = prio;
-                        selectedPrio = prio?.prio; // guarda o ID
+                        selectedPrio = prio?.prio;
                       });
                     },
                     dropdownMenuEntries: PrioridadeLabel.entries,

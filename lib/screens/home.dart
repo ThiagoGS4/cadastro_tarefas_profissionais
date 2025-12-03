@@ -39,16 +39,13 @@ class HomeState extends State<Home> {
 
   void _aplicarOrdenacao() {
     if (_ordenarPorPrioridade) {
-      // menor número = maior prioridade (1 = emergente)
       details.sort((a, b) => a.prioridade.compareTo(b.prioridade));
     } else {
-      // volta pra ordem padrão (por data de criação, por exemplo)
       details.sort((a, b) => b.criadoEm.compareTo(a.criadoEm));
     }
   }
 
   String formatarData(String criadoEm) {
-    // se estiver sempre salvando DateTime.now().toString()
     final dt = DateTime.parse(criadoEm);
     return DateFormat('dd/MM/yyyy HH:mm').format(dt);
   }

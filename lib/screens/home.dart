@@ -1,4 +1,5 @@
 import 'package:cadastro_tarefas_profissionais/services/databaseHelper.dart';
+import 'package:cadastro_tarefas_profissionais/widgets/insertEditDialog.dart';
 import 'package:flutter/material.dart';
 import '../models/tarefaModel.dart';
 
@@ -10,10 +11,6 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  final tituloController = TextEditingController();
-  final prioridadeController = TextEditingController();
-  final codigoRegistroController = TextEditingController();
-
   List<Tarefa> details = [];
 
   @override
@@ -25,20 +22,8 @@ class HomeState extends State<Home> {
   Future<void> _carregarTarefas() async {
     final lista = await DatabaseHelper.listarTarefas();
     setState(() {
-      details = lista!;
+      details = lista ?? [];
     });
-  }
-
-  Future<void> _inserirTarefa() async {
-    final Tarefa model = Tarefa(
-      titulo: "titulo teste",
-      prioridade: 1,
-      criadoEm: DateTime.now().toString(),
-      codigoRegistro: "codigoRegistro teste",
-    );
-
-    await DatabaseHelper.inserirTarefa(model);
-    await _carregarTarefas(); // recarrega a lista depois de inserir
   }
 
   @override
@@ -49,11 +34,24 @@ class HomeState extends State<Home> {
         children: [
           Row(
             children: [
-              FloatingActionButton(
-                onPressed: () async {
-                  await _inserirTarefa();
-                },
-                child: const Icon(Icons.add),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FloatingActionButton(
+                      onPressed: () async => {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => InsertEditDialog(
+                            isEditing: false,
+                            onFinish: _carregarTarefas,
+                          ),
+                        ),
+                      },
+                      child: const Icon(Icons.add),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -69,6 +67,39 @@ class HomeState extends State<Home> {
                         title: Text(tarefa.titulo),
                         subtitle: Text(
                           'Prioridade: ${tarefa.prioridade} - Código: ${tarefa.codigoRegistro}',
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+
+                          children: [
+                            Text(
+                              tarefa.criadoEm.substring(
+                                tarefa.criadoEm.length -
+                                    10, //continuar aqui!!!!
+                              ),
+                            ),
+                            FloatingActionButton.small(
+                              onPressed: () => showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    InsertEditDialog(
+                                      isEditing: true,
+                                      itemSelecionado: tarefa,
+                                      onFinish: _carregarTarefas,
+                                    ),
+                              ),
+                              child: const Icon(Icons.edit),
+                            ),
+
+                            FloatingActionButton.small(
+                              heroTag: 'delete_${tarefa.id}',
+                              onPressed: () async {
+                                await DatabaseHelper.removerTarefa(tarefa.id!);
+                                await _carregarTarefas();
+                              },
+                              child: const Icon(Icons.delete),
+                            ),
+                          ],
                         ),
                       );
                     },

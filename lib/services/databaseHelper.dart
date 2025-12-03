@@ -39,9 +39,9 @@ class DatabaseHelper {
     );
   }
 
-  static Future<int> removerTarefa(Tarefa tarefa) async {
+  static Future<int> removerTarefa(int id) async {
     final db = await getBD();
-    return await db.delete("Tarefa", where: 'id = ?', whereArgs: [tarefa.id]);
+    return await db.delete("Tarefa", where: 'id = ?', whereArgs: [id]);
   }
 
   static Future<List<Tarefa>?> listarTarefas() async {

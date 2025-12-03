@@ -237,6 +237,10 @@ class _MyWidgetState extends State<InsertEditDialog> {
 
   Future<void> _atualizarTarefa() async {
     final prioNum = selectedPrio ?? PrioridadeLabel.nurgente.prio;
+
+    if (autoGerarCodigoRegistro) {
+      codigoRegistroController.text = gerarCodigoRegistro(DateTime.now());
+    }
     final Tarefa model = Tarefa(
       id: widget.itemSelecionado!.id,
       titulo: tituloController.value.text,

@@ -184,6 +184,12 @@ class HomeState extends State<Home> {
                             children: [
                               IconButton(
                                 icon: const Icon(Icons.edit),
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStateProperty.all<Color>(
+                                        Colors.blue,
+                                      ),
+                                ),
                                 onPressed: () async {
                                   final resultado = await showDialog<bool>(
                                     context: context,
@@ -200,6 +206,12 @@ class HomeState extends State<Home> {
                               ),
                               IconButton(
                                 icon: const Icon(Icons.delete),
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStateProperty.all<Color>(
+                                        Colors.red,
+                                      ),
+                                ),
                                 onPressed: () async {
                                   await DatabaseHelper.removerTarefa(
                                     tarefa.id!,
